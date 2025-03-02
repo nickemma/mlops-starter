@@ -1,10 +1,23 @@
-# Python: train.py
-import mlflow
-from sklearn.ensemble import RandomForestClassifier
+# Model training script
 
-def train_model(data):
+import mlflow
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+
+def train_model():
+    # Sample data
+    X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+    y = np.array([0, 0, 1, 1])
+    
     with mlflow.start_run():
-        model = RandomForestClassifier()
-        model.fit(data.X, data.y)
-        mlflow.log_metric("accuracy", model.score(data.X_test, data.y_test))
+        model = LogisticRegression()
+        model.fit(X, y)
+        accuracy = model.score(X, y)
+        
+        # Log metrics and model
+        mlflow.log_metric("accuracy", accuracy)
         mlflow.sklearn.log_model(model, "model")
+        print(f"Model trained with accuracy: {accuracy:.2f}")
+
+if __name__ == "__main__":
+    train_model()
